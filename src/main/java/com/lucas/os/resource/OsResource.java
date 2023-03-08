@@ -1,7 +1,7 @@
 package com.lucas.os.resource;
 
 import com.lucas.os.domain.dtos.OrdemServicoDto;
-import com.lucas.os.service.impl.OrdemServicoServiceImpl;
+import com.lucas.os.service.interfacesservice.OrdemServicoService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class OsResource {
 
     public static final String ID = "/{id}";
     @Autowired
-    private OrdemServicoServiceImpl service;
+    private OrdemServicoService service;
 
     @Autowired
     private ModelMapper mapper;
@@ -31,8 +31,8 @@ public class OsResource {
 
     @GetMapping
     public ResponseEntity<List<OrdemServicoDto>> findAll() {
-        return ResponseEntity.ok().body(service.findAll()
-                .stream().map(x -> mapper.map(x, OrdemServicoDto.class)).collect(Collectors.toList()));
+        List<OrdemServicoDto> list = service.findAll().stream().map(x -> new OrdemServicoDto(x)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(list);
     }
 
     @PostMapping
