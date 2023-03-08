@@ -6,6 +6,7 @@ import com.lucas.os.service.interfacesservice.ClienteService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,18 +27,19 @@ public class ClienteResource {
     @Autowired
     private ModelMapper mapper;
 
-    @GetMapping(value = ID)
+    @GetMapping(value = ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     ResponseEntity<ClienteDto> findById(@PathVariable Integer id){
         return ResponseEntity.ok().body(mapper.map(service.findById(id),ClienteDto.class));
     }
 
-    @GetMapping
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<ClienteDto>> findAll() {
         return ResponseEntity.ok().body(service.findAll()
                 .stream().map(x -> mapper.map(x, ClienteDto.class)).collect(Collectors.toList()));
     }
 
-    @PostMapping
+    @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<ClienteDto> create(@Valid @RequestBody ClienteDto objDto){
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path(ID).buildAndExpand(service.create(objDto).getId()).toUri();
@@ -45,7 +47,8 @@ public class ClienteResource {
     }
 
 
-    @PutMapping(value = ID)
+    @PutMapping(value = ID, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<ClienteDto> update(@PathVariable Integer id, @Valid @RequestBody ClienteDto obj){
         obj.setId(id);
         Cliente newObj = service.update(obj);
