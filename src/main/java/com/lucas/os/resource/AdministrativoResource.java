@@ -15,6 +15,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping(value = "/admin")
 public class AdministrativoResource {
@@ -34,6 +35,7 @@ public class AdministrativoResource {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<AdministrativoDto>> findAll() {
+
         return ResponseEntity.ok().body(service.findAll()
                 .stream().map(x -> mapper.map(x, AdministrativoDto.class)).collect(Collectors.toList()));
     }

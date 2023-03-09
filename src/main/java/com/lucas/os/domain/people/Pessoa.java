@@ -17,7 +17,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "TB_PESSOA")
-public abstract class Pessoa implements Serializable {
+public abstract class Pessoa  implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
