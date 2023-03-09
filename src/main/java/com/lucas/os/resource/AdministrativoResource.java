@@ -34,6 +34,7 @@ public class AdministrativoResource {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<AdministrativoDto>> findAll() {
+
         return ResponseEntity.ok().body(service.findAll()
                 .stream().map(x -> mapper.map(x, AdministrativoDto.class)).collect(Collectors.toList()));
     }
