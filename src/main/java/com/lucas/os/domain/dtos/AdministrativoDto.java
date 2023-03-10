@@ -6,15 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 
 @NoArgsConstructor
 @Getter @Setter
-public class AdministrativoDto implements Serializable {
+public class AdministrativoDto extends RepresentationModel<AdministrativoDto> implements Serializable {
 
 
-    private Integer id;
+    private Integer key;
     @NotEmpty(message =  "O campo NOME é requerido")
     private String nome;
     @CPF
@@ -22,7 +23,7 @@ public class AdministrativoDto implements Serializable {
     private String telefone;
 
     public AdministrativoDto(Administrativo obj) {
-        this.id = obj.getId();
+        this.key = obj.getId();
         this.nome = obj.getNome();
         this.cpf = obj.getCpf();
         this.telefone = obj.getTelefone();
