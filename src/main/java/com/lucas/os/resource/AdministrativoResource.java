@@ -52,7 +52,7 @@ public class AdministrativoResource {
     @PutMapping(value = ID, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<AdministrativoDto> update(@PathVariable Integer id, @Valid @RequestBody AdministrativoDto obj){
-        obj.setId(id);
+        obj.setKey(id);
         Administrativo newObj = service.update(obj);
         return ResponseEntity.ok().body(mapper.map(newObj, AdministrativoDto.class));
     }

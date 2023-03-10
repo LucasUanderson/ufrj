@@ -17,13 +17,13 @@ import java.util.List;
 @AllArgsConstructor
 @Getter @Setter
 
-@Entity(name = "TB_CLIENTE")
-public class Cliente extends Pessoa implements Serializable {
+@Entity(name = "TB_TAREFA")
+public class Tarefa extends Pessoa implements Serializable {
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "tarefa")
     private List<OrdemServico> list = new ArrayList<>();
 
-    public Cliente(Integer id, String nome, @CPF String cpf, String telefone) {
+    public Tarefa(Integer id, String nome, @CPF String cpf, String telefone) {
         super(id, nome, cpf, telefone);
     }
 }
