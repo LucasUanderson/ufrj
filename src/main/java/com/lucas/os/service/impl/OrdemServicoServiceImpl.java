@@ -5,7 +5,7 @@ import com.lucas.os.domain.dtos.OrdemServicoDto;
 import com.lucas.os.domain.enuns.Prioridade;
 import com.lucas.os.domain.enuns.Status;
 import com.lucas.os.domain.people.Administrativo;
-import com.lucas.os.domain.people.Cliente;
+import com.lucas.os.domain.people.Tarefa;
 import com.lucas.os.repositories.OrdemServicoRepository;
 import com.lucas.os.service.exception.ObjectNotFoundException;
 import com.lucas.os.service.interfacesservice.OrdemServicoService;
@@ -29,7 +29,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
     private AdministrativoServiceImpl service;
 
     @Autowired
-    private ClienteServiceImpl serviceCliente;
+    private TarefaServiceImpl serviceTarefa;
 
 
     @Override
@@ -53,23 +53,23 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
 
     @Override
     public OrdemServico update(OrdemServicoDto obj) {
-        findById(obj.getId());
+        findById(obj.getKey());
         return fromDto(obj);
     }
 
 
     private OrdemServico fromDto(OrdemServicoDto obj){
         OrdemServico newObj = new OrdemServico();
-        newObj.setId(obj.getId());
+        newObj.setId(obj.getKey());
         newObj.setObservacoes(obj.getObservacoes());
         newObj.setPrioridade(Prioridade.toEnum(obj.getPrioridade()));
         newObj.setStatus(Status.toEnum(obj.getStatus()));
 
         Administrativo adm = service.findById(obj.getAdministrativo());
-        Cliente cliente = serviceCliente.findById(obj.getCliente());
+        Tarefa cliente = serviceTarefa.findById(obj.getTarefa());
 
         newObj.setAdministrativo(adm);
-        newObj.setCliente(cliente);
+        newObj.setTarefa(cliente);
         return repository.save(newObj);
 
     }

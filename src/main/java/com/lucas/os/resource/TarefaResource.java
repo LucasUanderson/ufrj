@@ -1,8 +1,8 @@
 package com.lucas.os.resource;
 
-import com.lucas.os.domain.dtos.ClienteDto;
-import com.lucas.os.domain.people.Cliente;
-import com.lucas.os.service.interfacesservice.ClienteService;
+import com.lucas.os.domain.dtos.TarefaDto;
+import com.lucas.os.domain.people.Tarefa;
+import com.lucas.os.service.interfacesservice.TarefaService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,31 +17,31 @@ import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping(value = "/cliente")
-public class ClienteResource {
+@RequestMapping(value = "/tarefa")
+public class TarefaResource {
 
     public static final String ID = "/{id}";
 
     @Autowired
-    private ClienteService service;
+    private TarefaService service;
 
     @Autowired
     private ModelMapper mapper;
 
     @GetMapping(value = ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    ResponseEntity<ClienteDto> findById(@PathVariable Integer id){
-        return ResponseEntity.ok().body(mapper.map(service.findById(id),ClienteDto.class));
+    ResponseEntity<TarefaDto> findById(@PathVariable Integer id){
+        return ResponseEntity.ok().body(mapper.map(service.findById(id), TarefaDto.class));
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<ClienteDto>> findAll() {
+    public ResponseEntity<List<TarefaDto>> findAll() {
         return ResponseEntity.ok().body(service.findAll()
-                .stream().map(x -> mapper.map(x, ClienteDto.class)).collect(Collectors.toList()));
+                .stream().map(x -> mapper.map(x, TarefaDto.class)).collect(Collectors.toList()));
     }
 
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<ClienteDto> create(@Valid @RequestBody ClienteDto objDto){
+    public ResponseEntity<TarefaDto> create(@Valid @RequestBody TarefaDto objDto){
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path(ID).buildAndExpand(service.create(objDto).getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -50,15 +50,15 @@ public class ClienteResource {
 
     @PutMapping(value = ID, consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<ClienteDto> update(@PathVariable Integer id, @Valid @RequestBody ClienteDto obj){
-        obj.setId(id);
-        Cliente newObj = service.update(obj);
-        return ResponseEntity.ok().body(mapper.map(newObj, ClienteDto.class));
+    public ResponseEntity<TarefaDto> update(@PathVariable Integer id, @Valid @RequestBody TarefaDto obj){
+        obj.setKey(id);
+        Tarefa newObj = service.update(obj);
+        return ResponseEntity.ok().body(mapper.map(newObj, TarefaDto.class));
     }
 
 
     @DeleteMapping(value = ID)
-    public ResponseEntity<ClienteDto> delete(@PathVariable Integer id){
+    public ResponseEntity<TarefaDto> delete(@PathVariable Integer id){
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -1,11 +1,11 @@
 package com.lucas.os.service.impl;
 
-import com.lucas.os.domain.dtos.ClienteDto;
-import com.lucas.os.domain.people.Cliente;
-import com.lucas.os.repositories.ClienteRepository;
-import com.lucas.os.service.interfacesservice.ClienteService;
+import com.lucas.os.domain.dtos.TarefaDto;
+import com.lucas.os.domain.people.Tarefa;
+import com.lucas.os.repositories.TarefaRepository;
 import com.lucas.os.service.exception.DataIntegratyViolationException;
 import com.lucas.os.service.exception.ObjectNotFoundException;
+import com.lucas.os.service.interfacesservice.TarefaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,39 +14,39 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ClienteServiceImpl implements ClienteService {
+public class TarefaServiceImpl implements TarefaService {
 
     @Autowired
     private ModelMapper mapper;
 
     @Autowired
-    private ClienteRepository repository;
+    private TarefaRepository repository;
 
     @Override
-    public Cliente findById(Integer id) {
-        Optional<Cliente> obj = repository.findById(id);
+    public Tarefa findById(Integer id) {
+        Optional<Tarefa> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
-                "Objeto não encontrado! Id: " + ", Tipo" + Cliente.class.getName()));
+                "Objeto não encontrado! Id: " + ", Tipo" + Tarefa.class.getName()));
     }
 
     @Override
-    public List<Cliente> findAll() {
+    public List<Tarefa> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public Cliente create(ClienteDto obj) {
-        return repository.save(mapper.map(obj, Cliente.class));
+    public Tarefa create(TarefaDto obj) {
+        return repository.save(mapper.map(obj, Tarefa.class));
     }
 
     @Override
-    public Cliente update(ClienteDto obj) {
-        return repository.save(mapper.map(obj, Cliente.class));
+    public Tarefa update(TarefaDto obj) {
+        return repository.save(mapper.map(obj, Tarefa.class));
     }
 
     @Override
     public void delete(Integer id) {
-        Cliente obj = findById(id);
+        Tarefa obj = findById(id);
         if(obj.getList().size() > 0){
             throw new DataIntegratyViolationException("Administrativo possui ordens de serviço, não pode ser deletado");
         }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lucas.os.domain.enuns.Prioridade;
 import com.lucas.os.domain.enuns.Status;
 import com.lucas.os.domain.people.Administrativo;
-import com.lucas.os.domain.people.Cliente;
+import com.lucas.os.domain.people.Tarefa;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,8 +33,8 @@ public class OrdemServico {
     @JoinColumn(name = "adm_id")
     private Administrativo administrativo;
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    @JoinColumn(name = "tarefa_id")
+    private Tarefa tarefa;
 
 
     //Construtores
@@ -46,7 +46,7 @@ public class OrdemServico {
         this.setStatus(Status.ABERTO);
     }
 
-    public OrdemServico(Integer id, Prioridade prioridade, String observacoes, Status status, Administrativo administrativo, Cliente cliente) {
+    public OrdemServico(Integer id, Prioridade prioridade, String observacoes, Status status, Administrativo administrativo, Tarefa tarefa) {
         super();
         this.id = id;
         this.setDataAbertura(LocalDateTime.now());
@@ -54,7 +54,7 @@ public class OrdemServico {
         this.observacoes = observacoes;
         this.status = (status == null) ? 0 : status.getCod();
         this.administrativo = administrativo;
-        this.cliente = cliente;
+        this.tarefa = tarefa;
     }
 
 
