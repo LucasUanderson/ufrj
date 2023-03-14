@@ -1,5 +1,6 @@
 package com.lucas.os.domain.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lucas.os.domain.people.Tarefa;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 @Getter @Setter
 public class TarefaDto extends RepresentationModel<TarefaDto> implements Serializable {
 
-
+    @JsonProperty("id")
     private Integer key;
     @NotEmpty(message =  "O campo NOME é requerido")
     private String nome;
