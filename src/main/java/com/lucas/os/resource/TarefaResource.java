@@ -3,9 +3,12 @@ package com.lucas.os.resource;
 import com.lucas.os.domain.dtos.TarefaDto;
 import com.lucas.os.domain.people.Tarefa;
 import com.lucas.os.service.interfacesservice.TarefaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +18,13 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @CrossOrigin("*")
 @RestController
-@RequestMapping(value = "/tarefa")
+@RequestMapping(value = "/api/tarefa/v1")
+@Tag(name = "Tarefas", description = "Gerenciador de tarefas")
 public class TarefaResource {
 
     public static final String ID = "/{id}";
@@ -30,13 +37,23 @@ public class TarefaResource {
 
     @GetMapping(value = ID, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     ResponseEntity<TarefaDto> findById(@PathVariable Integer id){
-        return ResponseEntity.ok().body(mapper.map(service.findById(id), TarefaDto.class));
+        Link link = WebMvcLinkBuilder.linkTo(this.getClass()).withSelfRel();
+        return ResponseEntity.ok().body(mapper.map(service.findById(id), TarefaDto.class).add(
+                linkTo(methodOn(TarefaResource.class).findById(id)).withSelfRel()));
+
     }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<TarefaDto>> findAll() {
-        return ResponseEntity.ok().body(service.findAll()
-                .stream().map(x -> mapper.map(x, TarefaDto.class)).collect(Collectors.toList()));
+        List<TarefaDto> tarefas = service.findAll()
+                .stream().map(x -> mapper.map(x, TarefaDto.class)).collect(Collectors.toList());
+
+        for (TarefaDto tarefa : tarefas){
+            Link selfLink = WebMvcLinkBuilder.linkTo(this.getClass()).slash(tarefa.getKey()).withSelfRel();
+            tarefa.add(selfLink);
+        }
+        return ResponseEntity.ok().body(tarefas);
+
     }
 
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
@@ -44,7 +61,9 @@ public class TarefaResource {
     public ResponseEntity<TarefaDto> create(@Valid @RequestBody TarefaDto objDto){
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path(ID).buildAndExpand(service.create(objDto).getId()).toUri();
-        return ResponseEntity.created(uri).build();
+        Link selfLink = WebMvcLinkBuilder.linkTo(this.getClass()).slash(objDto.getKey()).withSelfRel();
+        objDto.add(selfLink);
+        return ResponseEntity.created(uri).body(objDto);
     }
 
 
@@ -53,7 +72,8 @@ public class TarefaResource {
     public ResponseEntity<TarefaDto> update(@PathVariable Integer id, @Valid @RequestBody TarefaDto obj){
         obj.setKey(id);
         Tarefa newObj = service.update(obj);
-        return ResponseEntity.ok().body(mapper.map(newObj, TarefaDto.class));
+        Link selfLink = WebMvcLinkBuilder.linkTo(this.getClass()).slash(newObj.getId()).withSelfRel();
+        return ResponseEntity.ok().body(mapper.map(newObj, TarefaDto.class).add(selfLink));
     }
 
 

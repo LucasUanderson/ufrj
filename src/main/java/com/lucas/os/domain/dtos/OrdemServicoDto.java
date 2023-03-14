@@ -1,6 +1,7 @@
 package com.lucas.os.domain.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lucas.os.domain.OrdemServico;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class OrdemServicoDto extends RepresentationModel<OrdemServicoDto> implements Serializable {
 
+    @JsonProperty("id")
     private Integer key;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataAbertura;

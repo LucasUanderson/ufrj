@@ -29,7 +29,7 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
     private AdministrativoServiceImpl service;
 
     @Autowired
-    private TarefaServiceImpl serviceTarefa;
+    private TarefaServiceImpl serviceCliente;
 
 
     @Override
@@ -66,10 +66,10 @@ public class OrdemServicoServiceImpl implements OrdemServicoService {
         newObj.setStatus(Status.toEnum(obj.getStatus()));
 
         Administrativo adm = service.findById(obj.getAdministrativo());
-        Tarefa cliente = serviceTarefa.findById(obj.getTarefa());
+        Tarefa tarefa = serviceCliente.findById(obj.getTarefa());
 
         newObj.setAdministrativo(adm);
-        newObj.setTarefa(cliente);
+        newObj.setTarefa(tarefa);
         return repository.save(newObj);
 
     }
