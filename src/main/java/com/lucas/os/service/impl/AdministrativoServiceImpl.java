@@ -25,6 +25,7 @@ public class AdministrativoServiceImpl implements AdministrativoService {
     @Override
     public Administrativo findById(Integer id) {
         Optional<Administrativo> obj = repository.findById(id);
+
         return obj.orElseThrow(() -> new ObjectNotFoundException(
                 "Objeto não encontrado! Id: " + ", Tipo" + Administrativo.class.getName()));
     }
